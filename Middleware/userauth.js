@@ -1,28 +1,24 @@
 const jwt = require('jsonwebtoken')
-const JWT_SECRET = 'lajfhajkdlk';
+const JWT_SECRET = "hksdjfhalkl;dlfjk"
 
-function userMiddleWare (req,res,next){
-    const token = req.headers.authorization;
-    const response = jwt.verify(token,JWT_SECRET)
- if(!token){
-    res.json({
-        message: "Invalid Token"
-    })
- }try{
-    if(response){
-        req.userId = response.id;
-        next();
-    }
-    }catch(err){
+
+function userMiddleware(req, res, next) {
+    const token = req.headers.token;
+    const decoded = jwt.verify(token, JWT_SECRET);
+
+    if (decoded) {
+        req.userId = decoded.id;
+        next()
+    } else {
         res.status(403).json({
-            message: "Incorrect Creds"
+            message: "You are not signed in"
         })
     }
- 
+
 }
 
 module.exports = {
-    userMiddleWare: userMiddleWare,
+    userMiddleWare: userMiddleware,
     JWT_SECRET
     
 }

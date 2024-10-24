@@ -1,47 +1,49 @@
-
-const {Router}= require('express')
+const {Router} = require('express')
 const userRouter = Router();
-const bcrypt = require('bcrypt')
-const {UserModel} = require('../db')
-const jwt = require('jsonwebtoken')
-const {JWT_SECRET} = require('../userauth')
+const { UserModel } = require("../db");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt")
+const  { JWT_SECRET } = require("../Middleware/userauth");
 
 
 
+userRouter.post('/signUp', async function (req, res, next) {
+    try {
+        console.log('Request body:', req.body);  // Log request body
 
+        const { email, password, name } = req.body;
+        if (!email || !password || !name) {
+            return res.status(400).json({
+                message: "All fields are required"
+            });
+        }
 
+        const sameuser = await UserModel.findOne({ email });
 
+        if (sameuser) {
+            return res.status(400).json({
+                message: "User Already Exists"
+            });
+        }
 
-userRouter.post("/signup", async function(req,res,next){
- 
-    console.log(req.body)
-    
-   const {email,password,name} = req.body
+        const hashedPassword = await bcrypt.hash(password, 5);
 
-    const sameuser = await UserModel.findOne({email}) //Checking Email is existing or not 
+        await UserModel.create({
+            email: email,
+            password: hashedPassword,
+            name: name
+        });
 
-    if (sameuser){
         return res.json({
-            message: "User Already Exist "
-        })
+            message: "User Signed Up!"
+        });
+
+    } catch (err) {
+        console.error('Error during signup:', err);
+        res.status(500).json({ message: "Server Error" });
     }
-// Creating a model in database 
+});
 
-const hashedpassword = await bcrypt.hash(password, 5)
-
-    await UserModel.create({  
-        email: email,
-        password: hashedpassword,
-        name: name
-    })
-
-    return res.json({
-        message:"User Signed Up !"
-    })
-
-
-
-})
 
 userRouter.post('/login',async function(req,res,next){
     const email = req.body.email;
@@ -68,10 +70,7 @@ userRouter.post('/login',async function(req,res,next){
       }
 })
 
-userRouter.get('/purchase',function(req,res,next){
-    
-})
 
 module.exports = {
-     userRouter
+     userRouter: userRouter
 }
