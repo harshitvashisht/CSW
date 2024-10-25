@@ -3,7 +3,7 @@ const userRouter = Router();
 const { UserModel } = require("../db");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt")
-const  { JWT_SECRET } = require("../Middleware/userauth");
+const  { JWT_SECRET, userMiddleWare } = require("../Middleware/userauth");
 
 
 
@@ -70,6 +70,11 @@ userRouter.post('/login',async function(req,res,next){
       }
 })
 
+userRouter.use(userMiddleWare)
+
+userRouter.post('/purchase', async function(req,res){
+
+})
 
 module.exports = {
      userRouter: userRouter

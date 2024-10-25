@@ -1,4 +1,14 @@
-app.post('/admin/signup',async function(req,res,next){
+const {Router} = require('express')
+const adminRouter = Router();
+const { AdminModel } = require("../db");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt")
+const  { JWT_ADMIN_PASSWORD } = require("../config");
+const {z} = require('zod')
+
+
+
+adminRouter.post('/signUp',async function(req,res){
       
     const adreqbody = z.object({
         adminEmail: z.string().email(),
@@ -31,7 +41,7 @@ app.post('/admin/signup',async function(req,res,next){
     })
 })
 
-app.post('/admin/login',async function(req,res,next){
+adminRouter.post('/login',async function(req,res,next){
 
        const adminEmail = req.body.adminEmail
        const adminPassword = req.body.adminPassword
@@ -57,3 +67,7 @@ app.post('/admin/login',async function(req,res,next){
         })
        }
     })
+
+    module.exports={
+        adminRouter: adminRouter
+    }

@@ -1,10 +1,13 @@
 require('dotenv').config()
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const { string } = require('zod');
+
+mongoose.connect (process.env.MONGO_URL)
 
 const Schema = mongoose.Schema;
-const ObjectId = Schema.ObjectId;
+const ObjectId = mongoose.Types.ObjectId;
 
-mongoose.connect ()
+
 
 const User = new Schema ({
     email: String,
@@ -19,23 +22,25 @@ const Admin = new Schema({
 
 })
 
-const Course = new Schema ({
-    courseName: String, 
-    courseCode: String, 
-    coursePrice: String
+const CourseSchema = new Schema ({
+   title: String,
+   description: String,
+   price: Number,
+   imageUrl: String,
+   creatorId: ObjectId
+
 })
 
 
-const Purchase = new Schema({
-    purchaserEmail: String,
-    purchaserName: String,
-    coursePrice: String
+const PurchaseSchema = new Schema({
+    userId: ObjectId,
+    courseId: ObjectId
 })
 
 const UserModel = mongoose.model('users',User);
 const AdminModel = mongoose.model('admin',Admin);
-const CourseModel = mongoose.model('course',Course);
-const PurchaseModel = mongoose.model('purchase',Purchase);
+const CourseModel = mongoose.model('course',CourseSchema);
+const PurchaseModel = mongoose.model('purchase',PurchaseSchema);
 
 module.exports = {
     UserModel: UserModel,
