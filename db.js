@@ -1,9 +1,10 @@
+require('dotenv').config()
 const mongoose = require('mongoose')
 
 const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
 
-mongoose.connect ('mongodb+srv://Cluster18092:PJ4cLb9DRN4VnYDZ@cluster18092.kdf3zvm.mongodb.net/CSW')
+mongoose.connect ()
 
 const User = new Schema ({
     email: String,
