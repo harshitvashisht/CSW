@@ -1,9 +1,9 @@
 require('dotenv').config()
 const jwt = require('jsonwebtoken')
-const {JWT_ADMIN_PASSWORD} = require('../config')
+const JWT_ADMIN_PASSWORD = process.env.JWT_ADMIN_PASSWORD
 
 function adminMiddleware(req,res,next){
-      const token = req.heaaders.token;
+      const token = req.headers.authorization;
       const decoded = jwt.verify(token,JWT_ADMIN_PASSWORD)
 
       if (decoded){

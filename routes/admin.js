@@ -74,9 +74,10 @@ adminRouter.post('/course',adminMiddleware, async function (req,res){
     
     const adminId = req.userId
          
-    const {title, description, imageurl, price } = req.body;
+    const {title, description, imageurl, price  } = req.body;
 
-    await CourseModel.create({
+
+   const course =  await CourseModel.create({
 
         title: title,
         description: description,
@@ -87,9 +88,60 @@ adminRouter.post('/course',adminMiddleware, async function (req,res){
     })
 
     res.json({
-        message: "Course Created",
+        message:"Course created",
+        
+        courseId: course._id,
+     
+       
+    })
+
+
+adminRouter.put('/course' ,adminMiddleware, async function(req,res){
+      
+    const adminId = req.userId
+         
+    const {title, description, imageurl, price ,courseId } = req.body;
+
+
+    
+   const course =  await CourseModel.updateOne({
+
+        _id: courseId,
+        creatorId: adminId
+       
+   }, {
+      
+        title: title,
+        description: description,
+        price: price,
+        imageUrl: imageurl,
+       
+
+    })
+
+
+    res.json({
+        message:"Course Upadated",
         courseId: course._id
     })
+
+})
+
+adminRouter.get('/course/bulk',adminMiddleware, async function(req,res){
+        
+    const adminId = req.userId;
+
+    const courses = await CourseModel.find({
+        creatorId: adminId
+    })
+   
+    res.json ({
+        message: "Your All Courses !!",
+        courses
+    })
+
+
+})
 
 
 })
