@@ -70,7 +70,7 @@ adminRouter.post('/login',async function(req,res,next){
     })
 
 
-adminRouter.post('/course',adminMiddleware, async function (req,res){
+adminRouter.post('/courses',adminMiddleware, async function (req,res){
     
     const adminId = req.userId
          
@@ -96,7 +96,7 @@ adminRouter.post('/course',adminMiddleware, async function (req,res){
     })
 
 
-adminRouter.put('/course' ,adminMiddleware, async function(req,res){
+adminRouter.put('/courses' ,adminMiddleware, async function(req,res){
       
     const adminId = req.userId
          
